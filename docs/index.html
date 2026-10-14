@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - hc4tw (Health Connect bridge for TrendWeight)</title>
+  <style>
+    :root {
+      --primary: #005ac1;
+      --surface: #f8f9fa;
+      --text: #1a1c1e;
+      --card-bg: #ffffff;
+      --border: #e0e2ec;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary: #a6c8ff;
+        --surface: #121316;
+        --text: #e2e2e6;
+        --card-bg: #1a1c1e;
+        --border: #43474e;
+      }
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--surface);
+      margin: 0;
+      padding: 24px 16px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 36px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    h1 {
+      color: var(--primary);
+      margin-top: 0;
+      font-size: 28px;
+    }
+    h2 {
+      color: var(--primary);
+      margin-top: 28px;
+      font-size: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+    p, li {
+      font-size: 15px;
+    }
+    .meta-box {
+      background: rgba(0, 90, 193, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 14px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    footer {
+      margin-top: 36px;
+      font-size: 13px;
+      color: #74777f;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Privacy Policy</h1>
+    <div class="meta-box">
+      <strong>App Name:</strong> hc4tw (Health Connect bridge for TrendWeight)<br>
+      <strong>Developer:</strong> Trevor Miranda<br>
+      <strong>Effective Date:</strong> October 13, 2026<br>
+      <strong>Contact:</strong> play@trevor.in
+    </div>
+
+    <p>
+      This Privacy Policy describes how <strong>hc4tw</strong> ("the App") handles information accessed on your device. We are committed to protecting your privacy and ensuring your sensitive health information remains entirely under your personal control.
+    </p>
+
+    <h2>1. Information Accessed via Android Health Connect</h2>
+    <p>
+      With your explicit permission granted through the Android Health Connect system dialog, the App accesses the following health data types:
+    </p>
+    <ul>
+      <li><strong>Weight Records:</strong> Body weight values and measurement timestamps (<code>READ_WEIGHT</code>).</li>
+      <li><strong>Body Fat Records:</strong> Body fat percentages and measurement timestamps (<code>READ_BODY_FAT</code>).</li>
+    </ul>
+
+    <h2>2. Purpose and Use of Data</h2>
+    <p>
+      The App accesses your Health Connect data for the sole purpose of transmitting your daily weigh-in and body fat measurements to your personal <a href="https://trendweight.com" target="_blank" rel="noopener">TrendWeight</a> account.
+    </p>
+    <p>
+      Your health data is used exclusively to power the user-facing synchronization functionality of the App. The App does <strong>not</strong> use your health information for any secondary purposes.
+    </p>
+
+    <h2>3. Data Sharing & Third-Party Disclosure</h2>
+    <ul>
+      <li><strong>Direct HTTPS Transmission:</strong> The App transmits your measurements directly from your device to TrendWeight's official REST API (<code>https://trendweight.com/api/v1/measurements/manual</code>) using encrypted HTTPS connections and authenticated with your private TrendWeight API key.</li>
+      <li><strong>No Intermediary Servers:</strong> The App does not operate or route your data through any intermediate third-party servers, relays, or cloud brokers.</li>
+      <li><strong>No Advertising or Tracking:</strong> We do not integrate any third-party advertising SDKs, tracking pixels, or marketing analytics. Your health data is <strong>never</strong> sold, rented, monetized, or shared with data brokers.</li>
+      <li><strong>No AI Model Training:</strong> Your health records are never used to train artificial intelligence or machine learning models.</li>
+    </ul>
+
+    <h2>4. Data Storage and Security</h2>
+    <ul>
+      <li><strong>On-Device Storage:</strong> Your TrendWeight API key and synchronization timestamps are stored locally in private application preferences protected by the Android sandbox.</li>
+      <li><strong>Diagnostic Logs:</strong> In-app diagnostic logs are stored exclusively in internal storage on your device. For security, your TrendWeight API key is automatically masked in all log outputs. Diagnostic logs are never automatically uploaded; they are only shared if you explicitly choose to copy or export them for troubleshooting.</li>
+    </ul>
+
+    <h2>5. User Control and Data Deletion</h2>
+    <ul>
+      <li><strong>Revoking Permissions:</strong> You can revoke the App's access to Health Connect at any time via your device's <em>Settings &gt; Security &amp; Privacy &gt; Health Connect &gt; App permissions</em>.</li>
+      <li><strong>Deleting App Data:</strong> Uninstalling the App or clearing app data via Android Settings permanently deletes your locally stored API key, preferences, and diagnostic logs from your device.</li>
+      <li><strong>Deleting Synced Measurements:</strong> Any measurements synchronized to your TrendWeight account can be viewed or deleted directly from your TrendWeight account at <a href="https://trendweight.com" target="_blank" rel="noopener">trendweight.com</a>.</li>
+    </ul>
+
+    <h2>6. Changes to This Privacy Policy</h2>
+    <p>
+      If this Privacy Policy is updated, the revised policy will be posted on this page with an updated Effective Date.
+    </p>
+
+    <h2>7. Contact Information</h2>
+    <p>
+      If you have questions or concerns regarding this Privacy Policy or your data privacy, please contact:
+    </p>
+    <p>
+      <strong>Trevor Miranda</strong><br>
+      Email: <a href="mailto:play@trevor.in">play@trevor.in</a>
+    </p>
+
+    <footer>
+      &copy; 2026 Trevor Miranda. All rights reserved.
+    </footer>
+  </div>
+</body>
+</html>

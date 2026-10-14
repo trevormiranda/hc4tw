@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+
+    <!-- Bridge Base Accent Line -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#64748B"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M 3,24 H 29" />
+
+    <!-- Left Arrow (Cyan, pointing right) -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#0284C7"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M 4,14 H 11.5" />
+    <path
+        android:fillColor="#0284C7"
+        android:strokeColor="#0284C7"
+        android:strokeWidth="1"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round"
+        android:pathData="M 10,8.5 L 15,14 L 10,19.5 Z" />
+
+    <!-- Right Arrow (Emerald, pointing left) -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#10B981"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:pathData="M 28,14 H 20.5" />
+    <path
+        android:fillColor="#10B981"
+        android:strokeColor="#10B981"
+        android:strokeWidth="1"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round"
+        android:pathData="M 22,8.5 L 17,14 L 22,19.5 Z" />
+
+</vector>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">hc4tw</string>
+    <string name="app_full_name">Health Connect bridge for TrendWeight</string>
+    <string name="health_connect_rationale">This app reads weight and body fat records from Health Connect to synchronize them automatically with your TrendWeight account.</string>
+</resources>
