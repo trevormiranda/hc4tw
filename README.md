@@ -27,6 +27,8 @@ This mobile app is **100% independent** of the Python bridge daemon and Cloudfla
 
 ## Quick Start Guide
 
+> 📘 **Visual Setup Walkthrough**: View the step-by-step visual guide for connecting your scale or logging app (Withings, Fitbit, Garmin, etc.) at [docs/howto.html](https://trevor.github.io/hc4tw/howto.html).
+
 ### 1. Grant Health Connect Permissions
 1. Open the **TrendWeight Bridge** app.
 2. Under **Health Connect Access**, tap **Grant Health Connect Permissions**.

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup Walkthrough - Connecting Your Logging App to Health Connect & hc4tw</title>
+  <style>
+    :root {
+      --primary: #005ac1;
+      --surface: #f8f9fa;
+      --text: #1a1c1e;
+      --card-bg: #ffffff;
+      --border: #e0e2ec;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary: #a6c8ff;
+        --surface: #121316;
+        --text: #e2e2e6;
+        --card-bg: #1a1c1e;
+        --border: #43474e;
+      }
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--surface);
+      margin: 0;
+      padding: 24px 16px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 36px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    h1 {
+      color: var(--primary);
+      margin-top: 0;
+      font-size: 26px;
+    }
+    p {
+      font-size: 15px;
+    }
+    .meta-box {
+      background: rgba(0, 90, 193, 0.08);
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 14px;
+    }
+    .step-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 28px;
+    }
+    .step-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .step-number {
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: bold;
+      border-radius: 50%;
+      min-width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      font-size: 15px;
+    }
+    .step-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--primary);
+      margin: 0;
+    }
+    .step-description {
+      font-size: 15px;
+      margin-bottom: 14px;
+    }
+    .img-container {
+      text-align: center;
+    }
+    .step-img {
+      max-width: 100%;
+      max-height: 520px;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    .nav-links {
+      margin-top: 24px;
+      font-size: 14px;
+    }
+    .nav-links a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: medium;
+    }
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      margin-top: 36px;
+      font-size: 13px;
+      color: #74777f;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Setup Guide: Connect Your Logging App to Health Connect & hc4tw</h1>
+
+    <div class="meta-box">
+      <strong>Overview:</strong> Follow this visual walkthrough to configure your scale or logging app (Withings, Fitbit, Garmin, etc.) to write weight measurements to Android Health Connect so that <strong>hc4tw</strong> can read and synchronize them to <strong>TrendWeight</strong>.
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-number">1</div>
+        <h2 class="step-title">Open Health Connect Settings</h2>
+      </div>
+      <div class="step-description">
+        On your Android device, go to <strong>Settings</strong> &gt; <strong>Security &amp; privacy</strong> &gt; <strong>Privacy</strong> &gt; <strong>Health Connect</strong> (or open the standalone Health Connect app).
+      </div>
+      <div class="img-container">
+        <img class="step-img" src="howto/01PrivacyControls.png" alt="Step 1: Open Health Connect Settings">
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-number">2</div>
+        <h2 class="step-title">Select Your Logging App</h2>
+      </div>
+      <div class="step-description">
+        <strong>Your health apps</strong> lists installed health apps on your phone. Select your scale or weight logging app.
+      </div>
+      <div class="img-container">
+        <img class="step-img" src="howto/02SelectApp.png" alt="Step 2: Select Your Logging App">
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-number">3</div>
+        <h2 class="step-title">Allow Write Access for Weight</h2>
+      </div>
+      <div class="step-description">
+        Ensure that <strong>Weight</strong> (and optionally <strong>Body fat</strong>) under <strong>Allowed to write</strong> is enabled so your app can save measurements to Health Connect (make sure you look under Allowed to write, and not under Allowed to read).
+      </div>
+      <div class="img-container">
+        <img class="step-img" src="howto/03AllowWriteWeight.png" alt="Step 3: Allow Write Access for Weight">
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-number">4</div>
+        <h2 class="step-title">Inspect Your Health Data</h2>
+      </div>
+      <div class="step-description">
+        Return to the main Health Connect screen and tap <strong>Data and access</strong> (or <em>Your health data</em>) and verify that you can see your weight records in Health Connect.
+      </div>
+      <div class="img-container">
+        <img class="step-img" src="howto/04DataAndAccess.png" alt="Step 4: Inspect Your Health Data">
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-number">5</div>
+        <h2 class="step-title">Open Weight Measurements</h2>
+      </div>
+      <div class="step-description">
+        Under <strong>Body measurements</strong>, select <strong>Weight</strong>.
+      </div>
+      <div class="img-container">
+        <img class="step-img" src="howto/05DataAndAccessWeight.png" alt="Step 5: Open Weight Measurements">
+      </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-number">6</div>
+        <h2 class="step-title">Verify Your Daily Weigh-In Entry</h2>
+      </div>
+      <div class="step-description">
+        Confirm that your weigh-in recorded by your scale or logging app appears in Health Connect's entry list for <strong>Today</strong>.
+      </div>
+      <div class="img-container">
+        <img class="step-img" src="howto/06DataAndAccessWeightToday.png" alt="Step 6: Verify Your Daily Weigh-In Entry">
+      </div>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-number">7</div>
+        <h2 class="step-title">Sync to TrendWeight with hc4tw</h2>
+      </div>
+      <div class="step-description">
+        Open the <strong>hc4tw</strong> app on your phone and tap <strong>Sync Now</strong>. <strong>hc4tw</strong> will read your weigh-in from Health Connect and instantly synchronize it to your <strong>TrendWeight</strong> chart!
+      </div>
+      <div class="img-container">
+        <img class="step-img" src="howto/07hc4tw.png" alt="Step 7: Sync to TrendWeight with hc4tw">
+      </div>
+    </div>
+
+    <div class="nav-links">
+      <a href="index.html">&larr; Back to Privacy Policy</a>
+    </div>
+
+    <footer>
+      &copy; 2026 Trevor Miranda. All rights reserved.
+    </footer>
+  </div>
+</body>
+</html>
