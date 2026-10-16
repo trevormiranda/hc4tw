@@ -851,6 +851,21 @@ fun LogsCard(
 
             Spacer(modifier = Modifier.height(10.dp))
 
+            val context = LocalContext.current
+            OutlinedButton(
+                onClick = {
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://trevormiranda.github.io/hc4tw/howto.html"))
+                    context.startActivity(browserIntent)
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null, modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.width(6.dp))
+                Text("View Setup Walkthrough Guide", fontSize = 13.sp)
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
