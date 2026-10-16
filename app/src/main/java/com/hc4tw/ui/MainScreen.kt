@@ -3,6 +3,7 @@ package com.hc4tw.ui
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Clear
@@ -35,10 +37,12 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -53,6 +57,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -114,7 +119,11 @@ fun MainScreen(
 
     LaunchedEffect(Unit) {
         viewModel.userMessage.collect { msg ->
-            snackbarHostState.showSnackbar(msg)
+            snackbarHostState.showSnackbar(
+                message = msg,
+                actionLabel = "OK",
+                duration = androidx.compose.material3.SnackbarDuration.Long
+            )
         }
     }
 
@@ -175,7 +184,7 @@ fun MainScreen(
                     canSync = permissionState.hasWeightPermission && apiKey.isNotBlank(),
                     selectedDays = syncNowDays,
                     onDaysChanged = { viewModel.setSyncNowDays(it) },
-                    onSyncNow = { days -> viewModel.syncNow(forceFull = false, daysWindow = days) }
+                    onSyncNow = { days, forceFull -> viewModel.syncNow(forceFull = forceFull, daysWindow = days) }
                 )
             }
 
@@ -204,19 +213,14 @@ fun MainScreen(
                 )
             }
 
-            // Card 4: Background Sync & Options
+            // Card 4: Background Sync
             item {
                 SyncOptionsCard(
                     isBackgroundSyncEnabled = isBackgroundSyncEnabled,
                     syncIntervalMinutes = syncIntervalMinutes,
-                    forceFullDays = forceFullDays,
                     hasBackgroundPermission = permissionState.hasBackgroundPermission,
-                    isSyncing = isSyncing,
-                    canSync = permissionState.hasWeightPermission && apiKey.isNotBlank(),
                     onToggleBackgroundSync = { viewModel.toggleBackgroundSync(it) },
                     onIntervalChanged = { viewModel.setSyncInterval(it) },
-                    onForceFullDaysChanged = { viewModel.setForceFullDays(it) },
-                    onForceFullSync = { days -> viewModel.syncNow(forceFull = true, daysWindow = days) },
                     onRequestPermissions = onRequestPermissions
                 )
             }
@@ -260,8 +264,10 @@ fun StatusCard(
     canSync: Boolean,
     selectedDays: Int,
     onDaysChanged: (Int) -> Unit,
-    onSyncNow: (Int) -> Unit
+    onSyncNow: (days: Int, forceFull: Boolean) -> Unit
 ) {
+    var isForceFullChecked by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -316,7 +322,7 @@ fun StatusCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
-                    onClick = { onSyncNow(selectedDays) },
+                    onClick = { onSyncNow(selectedDays, isForceFullChecked) },
                     enabled = canSync && !isSyncing,
                     modifier = Modifier.weight(1f)
                 ) {
@@ -361,6 +367,32 @@ fun StatusCard(
                         }
                     }
                 }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Force Full Sync",
+                        fontWeight = FontWeight.Medium,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        text = "Posts all weigh-ins even if unchanged or previously uploaded",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Switch(
+                    checked = isForceFullChecked,
+                    onCheckedChange = { isForceFullChecked = it }
+                )
             }
         }
     }
@@ -436,6 +468,27 @@ fun HealthConnectCard(
                     }
                 }
                 permissionState.hasWeightPermission -> {
+                    var showManageHelpDialog by remember { mutableStateOf(false) }
+
+                    if (showManageHelpDialog) {
+                        AlertDialog(
+                            onDismissRequest = { showManageHelpDialog = false },
+                            title = { Text("How to Manage Permissions", fontWeight = FontWeight.Bold) },
+                            text = {
+                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Text("1. Tap 'Manage Permissions' below to open Health Connect.")
+                                    Text("2. Tap 'hc4tw' under 'Your health apps'.")
+                                    Text("3. Toggle Weight or Body Fat permissions ON or OFF as desired.")
+                                }
+                            },
+                            confirmButton = {
+                                TextButton(onClick = { showManageHelpDialog = false }) {
+                                    Text("Got It")
+                                }
+                            }
+                        )
+                    }
+
                     Column {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
@@ -456,8 +509,18 @@ fun HealthConnectCard(
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
-                        OutlinedButton(onClick = onRequestPermissions) {
-                            Text("Manage Permissions")
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            OutlinedButton(onClick = onRequestPermissions) {
+                                Text("Manage Permissions")
+                            }
+                            Spacer(modifier = Modifier.width(4.dp))
+                            IconButton(onClick = { showManageHelpDialog = true }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.HelpOutline,
+                                    contentDescription = "How to Manage Permissions",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
                         }
                     }
                 }
@@ -600,14 +663,9 @@ fun TrendWeightSettingsCard(
 fun SyncOptionsCard(
     isBackgroundSyncEnabled: Boolean,
     syncIntervalMinutes: Long,
-    forceFullDays: Int,
     hasBackgroundPermission: Boolean,
-    isSyncing: Boolean,
-    canSync: Boolean,
     onToggleBackgroundSync: (Boolean) -> Unit,
     onIntervalChanged: (Long) -> Unit,
-    onForceFullDaysChanged: (Int) -> Unit,
-    onForceFullSync: (Int) -> Unit,
     onRequestPermissions: () -> Unit
 ) {
     Card(
@@ -616,7 +674,7 @@ fun SyncOptionsCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "Sync Settings",
+                text = "Background Sync",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -637,7 +695,7 @@ fun SyncOptionsCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Background Sync",
+                        text = "Enable Periodic Sync",
                         fontWeight = FontWeight.Medium,
                         style = MaterialTheme.typography.bodyMedium
                     )
@@ -659,9 +717,41 @@ fun SyncOptionsCard(
             }
 
             if (!hasBackgroundPermission) {
+                var showBgHelpDialog by remember { mutableStateOf(false) }
+
+                if (showBgHelpDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showBgHelpDialog = false },
+                        title = { Text("How to Grant Background Permission", fontWeight = FontWeight.Bold) },
+                        text = {
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text("1. Tap 'Grant Background Permission' below to open Health Connect.")
+                                Text("2. Tap 'hc4tw' under 'Your health apps'.")
+                                Text("3. Tap 'Additional access' near the bottom.")
+                                Text("4. Turn ON 'Access data in the background'.")
+                            }
+                        },
+                        confirmButton = {
+                            TextButton(onClick = { showBgHelpDialog = false }) {
+                                Text("Got It")
+                            }
+                        }
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(8.dp))
-                OutlinedButton(onClick = onRequestPermissions) {
-                    Text("Grant Background Permission")
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    OutlinedButton(onClick = onRequestPermissions) {
+                        Text("Grant Background Permission")
+                    }
+                    Spacer(modifier = Modifier.width(4.dp))
+                    IconButton(onClick = { showBgHelpDialog = true }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.HelpOutline,
+                            contentDescription = "How to Grant Background Permission",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             } else if (isBackgroundSyncEnabled) {
                 Spacer(modifier = Modifier.height(12.dp))
@@ -707,49 +797,6 @@ fun SyncOptionsCard(
                     style = MaterialTheme.typography.bodySmall,
                     color = if (syncIntervalMinutes < 60) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant
                 )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedButton(
-                    onClick = { onForceFullSync(forceFullDays) },
-                    enabled = canSync && !isSyncing,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Force Full Sync")
-                }
-
-                var isForceDaysExpanded by remember { mutableStateOf(false) }
-
-                Box {
-                    OutlinedButton(
-                        onClick = { isForceDaysExpanded = true }
-                    ) {
-                        Text("Last $forceFullDays Days ▼", fontSize = 13.sp)
-                    }
-
-                    DropdownMenu(
-                        expanded = isForceDaysExpanded,
-                        onDismissRequest = { isForceDaysExpanded = false }
-                    ) {
-                        val options = listOf(1, 3, 7, 14, 30)
-                        options.forEach { days ->
-                            val label = if (days == 7) "Last 7 Days (Default)" else "Last $days Days"
-                            DropdownMenuItem(
-                                text = { Text(label) },
-                                onClick = {
-                                    onForceFullDaysChanged(days)
-                                    isForceDaysExpanded = false
-                                }
-                            )
-                        }
-                    }
-                }
             }
         }
     }

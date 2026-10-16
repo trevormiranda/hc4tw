@@ -199,6 +199,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _forceFullDays.value = validDays
     }
 
+    fun onOpenBackgroundSettings() {
+        viewModelScope.launch {
+            _userMessage.emit("In Health Connect: Tap 'Additional access' → turn on 'Access data in the background'.")
+        }
+    }
+
     fun toggleBackgroundSync(enabled: Boolean) {
         val hasBg = _permissionState.value.hasBackgroundPermission
         if (!hasBg && enabled) return

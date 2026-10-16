@@ -67,19 +67,26 @@ class HealthConnectManager(private val context: Context) {
     }
 
     fun openPermissionSettings(context: Context) {
-        val intent = android.content.Intent("android.health.connect.action.MANAGE_HEALTH_PERMISSIONS").apply {
-            putExtra(android.content.Intent.EXTRA_PACKAGE_NAME, context.packageName)
-        }
-        try {
-            context.startActivity(intent)
-        } catch (_: Exception) {
+        val intentsToTry = listOf(
+            android.content.Intent("android.health.connect.action.MANAGE_HEALTH_PERMISSIONS").apply {
+                putExtra(android.content.Intent.EXTRA_PACKAGE_NAME, context.packageName)
+            },
+            android.content.Intent("androidx.health.ACTION_HEALTH_CONNECT_SETTINGS"),
+            android.content.Intent("android.health.connect.action.HEALTH_CONNECT_SETTINGS"),
+            android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = android.net.Uri.fromParts("package", context.packageName, null)
+            }
+        )
+
+        for (intent in intentsToTry) {
             try {
-                val fallback = android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = android.net.Uri.fromParts("package", context.packageName, null)
+                if (intent.resolveActivity(context.packageManager) != null) {
+                    AppLogger.d(TAG, "Launching Health Connect settings intent: ${intent.action}")
+                    context.startActivity(intent)
+                    return
                 }
-                context.startActivity(fallback)
             } catch (e: Exception) {
-                AppLogger.e(TAG, "Failed to open Health Connect settings", e)
+                AppLogger.d(TAG, "Intent failed: ${intent.action} (${e.message})")
             }
         }
     }

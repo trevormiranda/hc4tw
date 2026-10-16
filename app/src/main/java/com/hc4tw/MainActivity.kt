@@ -24,6 +24,11 @@ class MainActivity : ComponentActivity() {
     ) { grantedPermissions ->
         AppLogger.i("MainActivity", "Permission callback received: $grantedPermissions")
         viewModel.refreshState()
+        val state = viewModel.permissionState.value
+        if (!state.hasWeightPermission) {
+            AppLogger.i("MainActivity", "Permissions not granted via launcher; opening Health Connect settings directly")
+            healthConnectManager.openPermissionSettings(this)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,10 +44,8 @@ class MainActivity : ComponentActivity() {
                         viewModel = viewModel,
                         onRequestPermissions = {
                             val state = viewModel.permissionState.value
-                            if (!state.hasWeightPermission || !state.hasBodyFatPermission) {
+                            if (!state.hasWeightPermission) {
                                 permissionLauncher.launch(healthConnectManager.permissions)
-                            } else if (!state.hasBackgroundPermission) {
-                                permissionLauncher.launch(setOf(HealthConnectManager.PERMISSION_READ_BACKGROUND))
                             } else {
                                 healthConnectManager.openPermissionSettings(this)
                             }
